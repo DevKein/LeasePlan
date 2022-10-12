@@ -1,0 +1,63 @@
+<!-- sldsValidatorIgnore -->
+<template>
+
+    <template if:false={customerFound}>
+        <lightning-card title="Search Caller Account">
+            <lightning-layout multiple-rows="true" vertical-align="end">
+                <lightning-layout-item size="4" padding="around-small">
+                    <!--Input text to Search Account-->
+                    <lightning-input type="text" label="Enter Account Name To Search"
+                        value={searchKey} 
+                        onchange={handelSearchKey}> 
+                    </lightning-input>
+                </lightning-layout-item >
+
+                <lightning-layout-item size="2" padding="around-small">
+                    <!-- Invoke search call -->
+                    <lightning-button label="Search" variant="brand" onclick={SearchAccountHandler}>
+
+                    </lightning-button>
+                </lightning-layout-item>
+                <template if:true={foundMultipleMatches}>
+                    <lightning-layout-item size="12" padding="around-small">
+                        <!--List Of matching accounts in case multiple matches or duplicates exist-->
+                        <lightning-datatable 
+                            key-field="Id" 
+                            data={accounts} 
+                            columns ={cols}
+                            hide-checkbox-column="true"  
+                            show-row-number-column="true"
+                            onrowaction={callRowAction}
+                        >
+                        </lightning-datatable>
+                    </lightning-layout-item>
+                </template>
+            </lightning-layout>
+        </lightning-card>
+    </template>
+    <template if:true={customerFound}>
+        <lightning-card>
+            <div slot="footer">
+                    <lightning-badge label="View"></lightning-badge>
+                    <lightning-badge label="Edit"></lightning-badge>
+                    <lightning-badge label="Reset"></lightning-badge>
+            </div>
+            <p class="slds-p-horizontal_small">
+                <lightning-datatable 
+                        key-field="Id" 
+                        data={accounts} 
+                        columns ={customer_cols}
+                        hide-checkbox-column="true"  
+                        show-row-number-column="true"
+                        onrowaction={callRowAction}
+                    >
+                    </lightning-datatable>
+            </p>
+        </lightning-card>
+    </template>
+
+    <template if:true={customerNotFound}>
+        <!--SHOW NOT FOUND-->
+    </template>
+    
+</template>
