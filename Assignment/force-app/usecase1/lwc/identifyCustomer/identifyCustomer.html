@@ -6,7 +6,7 @@
             <lightning-layout multiple-rows="true" vertical-align="end">
                 <lightning-layout-item size="4" padding="around-small">
                     <!--Input text to Search Account-->
-                    <lightning-input type="text" label="Enter Account Name To Search"
+                    <lightning-input type="text" label="Enter Account Name or Phone To Search"
                         value={searchKey} 
                         onchange={handelSearchKey}> 
                     </lightning-input>
@@ -36,7 +36,7 @@
         </lightning-card>
     </template>
     <template if:true={customerFound}>
-        <lightning-card>
+        <lightning-card title="Current Account">
             <div slot="footer">
                     <lightning-badge label="View"></lightning-badge>
                     <lightning-badge label="Edit"></lightning-badge>

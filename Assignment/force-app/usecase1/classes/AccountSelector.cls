@@ -7,7 +7,9 @@ public with sharing class AccountSelector {
          // Strip fields that are not readable/accessible
         SObjectAccessDecision decision = Security.stripInaccessible(
         AccessType.READABLE,
-        [ SELECT  Id, Name, Phone, BillingAddress FROM Account WHERE Name LIKE :searchkey ]);
+        [ SELECT  Id, Name, Phone, BillingAddress
+            FROM Account 
+            WHERE Name LIKE :searchkey OR Phone LIKE :searchkey ]);
 
         evaluateDecision(decision);
 
@@ -24,7 +26,10 @@ public with sharing class AccountSelector {
          // Strip fields that are not readable/accessible
         SObjectAccessDecision decision = Security.stripInaccessible(
         AccessType.READABLE,
-        [ SELECT  Id, Name, Phone, BillingAddress FROM Account WHERE Id = :accountId LIMIT 1]);
+        [ SELECT  Id, Name, Phone, BillingAddress, BillingStreet, 
+            BillingCity, BillingPostalCode, BillingState, BillingCountry 
+             FROM Account 
+             WHERE Id = :accountId LIMIT 1]);
  
         evaluateDecision(decision);
         

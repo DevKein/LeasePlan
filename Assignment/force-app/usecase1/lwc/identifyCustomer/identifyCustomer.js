@@ -48,7 +48,7 @@ export default class IdentifyCustomer extends LightningElement {
     }
 
     callRowAction( event ) {  
-        console.log('event.detail.row',event.detail.row)
+        console.log('event.detail.row',JSON.parse(JSON.stringify(event.detail.row)));
         const customerId =  event.detail.row.Id;
         const actionName = event.detail.action.name;  
         if ( actionName === 'SelectAccount' ) {  
@@ -63,7 +63,7 @@ export default class IdentifyCustomer extends LightningElement {
     }
     
     publishCustomerInfo(customerId) {
-        const payload = { recordId: customerId };
+        const payload = { recordId: customerId, messageType: 'customer' };
         publish(this.messageContext, CUSTOMER_INFO_CHANNEL, payload);
     }
 
