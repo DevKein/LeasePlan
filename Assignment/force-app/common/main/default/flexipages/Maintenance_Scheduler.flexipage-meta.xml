@@ -23,12 +23,8 @@
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
-                <componentInstanceProperties>
-                    <name>context</name>
-                    <value>GLOBAL</value>
-                </componentInstanceProperties>
-                <componentName>forceChatter:publisher</componentName>
-                <identifier>forceChatter_publisher</identifier>
+                <componentName>supplierList</componentName>
+                <identifier>c_supplierList</identifier>
             </componentInstance>
         </itemInstances>
         <name>region3</name>
