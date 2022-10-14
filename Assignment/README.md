@@ -76,14 +76,22 @@ Selected Supplier markers will be displayed by using their `Address fields`. Geo
 
 The map contains the map native list view auto enabled.
 
+![Supplier Map](/Assignment/images/supplierMap.png "Map of Suppliers")
+
 ### Maintanence Scheduler Lighnint App - out of requested scope
 
 This is a Lightning Application created to enable the service agent to work on a single page instead of navigating between Account, Case , Supplier objects.
 
+![Maintenance Scheduler](/Assignment/images/maintenanceScheduler.png "Maintenance Scheduler")
+
 The page comes with a customer search component where the service agent can search for a customer via their name or via their phone number. Partial search is allowed for Name but Phone excepts exact match due to security and scalability concerns.
 
-When there are more than one matching customer returned after searching with partil name term the component will display all matching customers in a datatable for service agent to verify and select.
+When there are more than one matching customer returned after searching with partial name term the component will display all matching customers in a datatable for service agent to verify and select.
+
+![Maintenance Scheduler multiple matches](/Assignment/images/multipleMatches.png "Maintenance Scheduler multiple matches")
 
 *Note:* This component doesn't support infinite-loading. Performance aspect is ignored for this assignment.
 
 Selecting a client will publish a message thru LMS for Supplier List and Supplier Map components to get notified and act accordingly.
+
+![Maintenance Scheduler with Customer](/Assignment/images/maintenanceSchedulerMarkers.png "Maintenance Scheduler with Customer")
