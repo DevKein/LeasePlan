@@ -12,3 +12,6 @@ package.xml
 **/__tests__/**
 
 **/appMenus/**
+
+**/objects/Account/**
+**/objects/Case/**

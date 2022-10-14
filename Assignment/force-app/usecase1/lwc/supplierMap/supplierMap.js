@@ -35,11 +35,6 @@ export default class SupplierMap extends LightningElement {
         location: { Street: '5 Market Street', PostalCode: '94103' },
     };
 
-    // HANDLERS
-    handleMarkerSelect(event) {
-        this.selectedMarkerValue = event.target.selectedMarkerValue;
-    }
-
     // Encapsulate logic for LMS subscribe.
     subscribeToMessageChannel() {
         this.subscription = subscribe(
@@ -47,6 +42,10 @@ export default class SupplierMap extends LightningElement {
             CUSTOMER_INFO_CHANNEL,
             (message) => this.handleMessage(message)
         );
+    }
+    
+    handleMarkerSelect(event) {
+        this.selectedMarkerValue = event.target.selectedMarkerValue;
     }
 
     // Handler for message received by component

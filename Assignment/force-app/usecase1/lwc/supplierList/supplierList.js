@@ -21,24 +21,25 @@ export default class SupplierList extends NavigationMixin(LightningElement) {
 
     cols = [
         { type: "button", 
-          initialWidth: 90, 
-          typeAttributes: {  
-            label: 'Add',  
-            name: 'addToMap',  
-            title: 'Add',  
-            disabled: false,  
-            value: 'Add',  
-            iconPosition: 'left'  
-        } },
+            initialWidth: 90, 
+            typeAttributes: {  
+                label: 'Add',  
+                name: 'addToMap',  
+                title: 'Add',  
+                disabled: false,  
+                value: 'Add',  
+                iconPosition: 'left'  
+            } 
+        },
         {label:'Supplier Name', fieldName:'Name' , type:'text'} ,
         {label:'Street', fieldName:'Street__c' , type:'text'} ,
         {label:'City', fieldName:'City__c' , type:'text'},
         {type: 'action',
-        fixedWidth: 30,
-        hideDefaultActions: true,
-        typeAttributes: {
-            rowActions: [{ id: 'item-1', label: 'Create Case', name: 'CreateCase' }],
-            id: { fieldName: 'id' }
+            fixedWidth: 30,
+            hideDefaultActions: true,
+            typeAttributes: {
+                rowActions: [{ id: 'item-1', label: 'Create Case', name: 'CreateCase' }],
+                id: { fieldName: 'id' }
         }}
     ]
 
@@ -68,7 +69,9 @@ export default class SupplierList extends NavigationMixin(LightningElement) {
         getSuppliers({accountId: this.customerId})
         .then(result => {
             this.totalRecountCount = result.length;
+            // store all suppliers for faster infinite load
             this.suppliers = [...this.suppliers, ...result];
+            // store a small chunck of suppliers to display and increment
             this.data = this.suppliers.slice(0, this.recordCount); 
             this.showTable = true;   
         })
@@ -83,14 +86,16 @@ export default class SupplierList extends NavigationMixin(LightningElement) {
         const actionName = event.detail.action.name;
         
         if ( actionName === 'addToMap' ) {  
-            console.log('call to action');
+            // Send adding the supplier marker message to the map component
             const payload = { recordId: event.detail.row.Id, messageType: 'supplier'};
             publish(this.messageContext, CUSTOMER_INFO_CHANNEL, payload);
         } else if(actionName === 'CreateCase') {
+            //Auto populate Account and Supplier lookups on the case create dialog
             const defaultValues = encodeDefaultFieldValues({
                 AccountId: this.customerId,
                 Supplier__c:  event.detail.row.Id
             });
+            // After displaying suppliers on the map choose the supplier to create a case
             this[NavigationMixin.Navigate]({
                 type: 'standard__objectPage',
                 attributes: {
@@ -129,6 +134,7 @@ export default class SupplierList extends NavigationMixin(LightningElement) {
 
     connectedCallback() {
         this.subscribeToMessageChannel();
+        // If the component is placed on a record page auto fetch suppliers to display.
         if(!!this.recordId) {
             this.customerId = this.recordId;
             this.fetchSupplier();

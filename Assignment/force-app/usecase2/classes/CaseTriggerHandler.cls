@@ -1,3 +1,6 @@
+// This trigger handles use ITrigger enterprise pattern
+// This is the simplified version
+// All delete scenarios are ignored for this assignment.
 public with sharing class CaseTriggerHandler implements ITrigger{
 
     public void bulkBefore(){

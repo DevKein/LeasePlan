@@ -23,7 +23,6 @@ export default class IdentifyCustomer extends NavigationMixin(LightningElement) 
     // The function to get search key value from the text input
     handelSearchKey(event){
         this.searchKey = event.target.value;
-        console.log('searchKey:: ',this.searchKey);
     }
 
     // The function to fetch accounts matching the search key using account name field
@@ -40,6 +39,8 @@ export default class IdentifyCustomer extends NavigationMixin(LightningElement) 
                 this.customerFound = true;
                 this.foundMultipleMatches = false;
                 this.customerId = this.accounts[0].Id;
+                // Publish an LMS messaage for other components in the page 
+                // subscribing to the channel can get notified about selected customer
                 this.publishCustomerInfo(this.customerId);
             }                
         })
@@ -51,19 +52,16 @@ export default class IdentifyCustomer extends NavigationMixin(LightningElement) 
     }
 
     callRowAction( event ) {  
-        console.log('event.detail.row',JSON.parse(JSON.stringify(event.detail.row)));
         this.customerId =  event.detail.row.Id;
         const actionName = event.detail.action.name;  
         if ( actionName === 'SelectAccount' ) {  
             this.customerFound = true;
             this.foundMultipleMatches = false;
-            
             this.accounts = [];
             this.accounts.push(event.detail.row);
-            console.log('this.accounts',JSON.parse(JSON.stringify(this.accounts)));
-        
-            this.publishCustomerInfo(this.customerId);
-  
+            // Publish an LMS messaage for other components in the page 
+            // subscribing to the channel can get notified about selected customer
+            this.publishCustomerInfo(this.customerId);  
         } else {
             // Do nothing
         }          
@@ -81,6 +79,7 @@ export default class IdentifyCustomer extends NavigationMixin(LightningElement) 
     }
 
     handleReset(event) {
+        // Reset customer search variables to enable new search
         this.customerFound = false;
         this.foundMultipleMatches = false;
         this.searchKey = '';
@@ -88,6 +87,7 @@ export default class IdentifyCustomer extends NavigationMixin(LightningElement) 
     }
     
     publishCustomerInfo(customerId) {
+        // LMS publish
         const payload = { recordId: customerId, messageType: 'customer' };
         publish(this.messageContext, CUSTOMER_INFO_CHANNEL, payload);
     }

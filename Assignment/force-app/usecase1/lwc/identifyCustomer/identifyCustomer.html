@@ -1,6 +1,6 @@
-<!-- sldsValidatorIgnore -->
+<!-- This component ignores customer not found situation! -->
 <template>
-
+    <!-- Show customer search card if no customer found yet -->
     <template if:false={customerFound}>
         <lightning-card title="Search Caller Account">
             <lightning-layout multiple-rows="true" vertical-align="end">
@@ -35,6 +35,7 @@
             </lightning-layout>
         </lightning-card>
     </template>
+    <!-- Show simple customer information section when the customer is found -->
     <template if:true={customerFound}>
         <lightning-card title="Current Account">
             <div slot="footer">
@@ -54,10 +55,5 @@
                     </lightning-datatable>
             </p>
         </lightning-card>
-    </template>
-
-    <template if:true={customerNotFound}>
-        <!--SHOW NOT FOUND-->
-    </template>
-    
+    </template>    
 </template>

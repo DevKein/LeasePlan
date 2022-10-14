@@ -3,6 +3,7 @@ public with sharing class CalculateCaseRateAverage {
     public static Map<Id,Account> accountsToUpdate = new Map<Id,Account>();
 
     public static void groupAverageRates(Map<Id,sObject> newMap) {
+        // Required OLS and FLS check at the begining to stop the process as early as possible
         checkPermissions();
         Set<Id> accountIds = new Set<Id>();
         for(Case c : (List<Case>)newMap.values()) {
@@ -22,7 +23,9 @@ public with sharing class CalculateCaseRateAverage {
        try {
             // For update ignore if rate didn't change
             // For insert ignore if rate is empty
+            // If the account is already included skip
             if((oldCase != NULL && oldCase.Rate__c != newCase.Rate__c) || (oldCase == NULL && newCase.Rate__c != NULL)) {
+                // If the account is already included skip
                 if(!accountsToUpdate.containsKey(newCase.AccountId) && accountIdToAggregateResult.containsKey(newCase.AccountId)){
                     Decimal avgRate = (Decimal)accountIdToAggregateResult.get(newCase.AccountId).get('avr');
                     if(avgRate != NULL){
