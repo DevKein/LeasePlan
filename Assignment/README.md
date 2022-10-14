@@ -1,4 +1,4 @@
-# LeasePlan
+# LeasePlan Assignment
 
 ## Assignment Use Case #1
 
@@ -62,3 +62,26 @@ Each row on this table contains 2 actions:
 
 ### Supplier Map Component - LWC
 
+This a LWC using `lightning-map` to display the caller customer and the selected supplier on native Google Maps. This component is a reusable component. Allowed places to use:
+
+* Account Record Page
+* Case Record Page (no valid use case)
+* Lightning App Pages
+
+In order to display customer marker this component uses the `BillingAddress` information and customer marker will be displayed via star shape.
+
+Selected Supplier markers will be displayed by using their `Address fields`. Geocode fields are *not* in use. Supplier markers will have the default marker shape.
+
+The map contains the map native list view auto enabled.
+
+### Maintanence Scheduler Lighnint App - out of scope
+
+This is a Lightning Application created to enable the service agent to work on a single page instead of navigating between Account, Case , Supplier objects.
+
+The page comes with a customer search component where the service agent can search for a customer via their name or via their phone number. Partial search is allowed for Name but Phone excepts exact match due to security and scalability concerns.
+
+When there are more than one matching customer returned after searching with partil name term the component will display all matching customers in a datatable for service agent to verify and select.
+
+*Note:* This component doesn't support infinite-loading. Performance aspect is ignored for this assignment.
+
+Selecting a client will publish a message thru LMS for Supplier List and Supplier Map components to get notified and act accordingly.
