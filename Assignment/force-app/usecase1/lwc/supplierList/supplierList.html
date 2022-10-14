@@ -1,21 +1,26 @@
 <template>
     <lightning-card title="List of Suppliers">
-        <template if:true={suppliers}>
-            <lightning-datatable 
-                key-field="Id" 
-                data={suppliers} 
-                columns ={cols}
-                hide-checkbox-column="true"  
-                show-row-number-column="true"
-                onrowaction={callRowAction}
-            >
-            </lightning-datatable>
+        <template if:true={showTable}>
+            <!-- Infinite load requires static viewport -->
+            <div class="slds-var-p-around_small" style="height: 200px;">
+                <lightning-datatable 
+                    key-field="Id" 
+                    data={data} 
+                    columns ={cols}
+                    hide-checkbox-column="true"  
+                    show-row-number-column="true"
+                    onrowaction={callRowAction}
+                    onloadmore={handleLoadMore}
+                    enable-infinite-loading
+                >
+                </lightning-datatable>
+            </div>
         </template>
-        <template if:false={suppliers}>
+        <template if:false={showTable}>
             <div class="slds-illustration slds-illustration_large" aria-hidden="false" style="background: white; padding: 7%;">
-                <img src="/img/chatter/OpenRoad.svg" class="slds-illustration__svg" alt=""/>
+                <img src="/img/chatter/Desert.svg" class="slds-illustration__svg" alt=""/>
                 <div class="slds-text-color_weak">
-                    <h3 class="slds-text-heading_medium">Search for the customer to display near by suppliers</h3>
+                    <h3 class="slds-text-heading_medium">Nothing to display</h3>
                 </div>
             </div>
         </template>

@@ -1,12 +1,14 @@
 import { LightningElement, track, wire } from 'lwc';
+import { NavigationMixin } from 'lightning/navigation';
 // Messaging services
 import { publish, MessageContext } from 'lightning/messageService';
-import CUSTOMER_INFO_CHANNEL from '@salesforce/messageChannel/CustomerInfoChannel__c';
+import CUSTOMER_INFO_CHANNEL from '@salesforce/messageChannel/customerInfoChannel__c';
 // Apex handler
 import getCustomerData from '@salesforce/apex/AccountSelector.getAccountData';
 
-export default class IdentifyCustomer extends LightningElement {
+export default class IdentifyCustomer extends NavigationMixin(LightningElement) {
     searchKey;
+    customerId;
     customerFound = false;
     customerNotFound = false;
     foundMultipleMatches = false;
@@ -37,7 +39,8 @@ export default class IdentifyCustomer extends LightningElement {
             } else {
                 this.customerFound = true;
                 this.foundMultipleMatches = false;
-                this.publishCustomerInfo(this.accounts[0].Id);
+                this.customerId = this.accounts[0].Id;
+                this.publishCustomerInfo(this.customerId);
             }                
         })
         .catch( error=>{
@@ -49,17 +52,39 @@ export default class IdentifyCustomer extends LightningElement {
 
     callRowAction( event ) {  
         console.log('event.detail.row',JSON.parse(JSON.stringify(event.detail.row)));
-        const customerId =  event.detail.row.Id;
+        this.customerId =  event.detail.row.Id;
         const actionName = event.detail.action.name;  
         if ( actionName === 'SelectAccount' ) {  
             this.customerFound = true;
             this.foundMultipleMatches = false;
-            this.publishCustomerInfo(customerId);
+            
+            this.accounts = [];
+            this.accounts.push(event.detail.row);
+            console.log('this.accounts',JSON.parse(JSON.stringify(this.accounts)));
+        
+            this.publishCustomerInfo(this.customerId);
   
         } else {
             // Do nothing
         }          
   
+    }
+
+    handleView(event) {
+        this[NavigationMixin.Navigate]({
+            type: 'standard__recordPage',
+            attributes: {
+                recordId: this.customerId,
+                actionName: 'view'
+            }
+        });
+    }
+
+    handleReset(event) {
+        this.customerFound = false;
+        this.foundMultipleMatches = false;
+        this.searchKey = '';
+        this.accounts = new Array();
     }
     
     publishCustomerInfo(customerId) {

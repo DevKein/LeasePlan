@@ -1,8 +1,9 @@
-import { LightningElement, wire, track } from 'lwc';
+import { LightningElement, wire, track, api } from 'lwc';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 // Import message service features required for subscribing and the customer info message channel
 import { subscribe, MessageContext } from 'lightning/messageService';
-import CUSTOMER_INFO_CHANNEL from '@salesforce/messageChannel/CustomerInfoChannel__c';
+import CUSTOMER_INFO_CHANNEL from '@salesforce/messageChannel/customerInfoChannel__c';
 
 import getCustomer from '@salesforce/apex/AccountSelector.getAccount';
 import getSupplier from '@salesforce/apex/SupplierSelector.getSupplier';
@@ -11,8 +12,12 @@ export default class SupplierMap extends LightningElement {
 
     @wire(MessageContext)
     messageContext;
+    showMap = false;
 
     customerId;
+    @api recordId;
+
+    selectedSuppliers = []
 
     // DEFAULT MAP PROPERTIES
 
@@ -46,13 +51,52 @@ export default class SupplierMap extends LightningElement {
 
     // Handler for message received by component
     handleMessage(message) {
+        this.showMap = false;
         if(message.messageType == 'customer') {
             this.customerId = message.recordId;
-            //apex call
-            getCustomer({accountId: this.customerId})
-            .then(result => {
-                this.account = result;
-                console.log(this.account.BillingAddress.street);
+            this.fetchCustomerAndMarker();            
+        } else if (message.messageType == 'supplier') {
+            this.supplierId = message.recordId;
+            this.fetchSupplierAndMarker(); 
+        }
+    }
+
+    fetchSupplierAndMarker() {
+        if(this.selectedSuppliers.indexOf(this.supplierId) < 0) {
+            getSupplier({supplierId: this.supplierId})
+                .then(result => {
+                    let tempMarkers = new Array();
+                    tempMarkers.push(...this.supplierMarkers);
+                    this.supplierMarkers = undefined;
+                    this.supplier = result;
+                    let marker = [{
+                        location: {
+                            Street:this.supplier.Street__c,
+                            City: this.supplier.City__c,
+                            PostalCode: this.supplier.Postal_Code__c,
+                            State: this.supplier.State__c,
+                            Country: this.supplier.Country__c,
+                        },
+                        title: this.supplier.Name
+                    }];
+                    tempMarkers.push(...marker);
+                    this.supplierMarkers = tempMarkers;
+                    this.selectedSuppliers.push(this.supplierId);
+                    this.showMap = true;
+                })
+                .catch( error=>{
+                    this.accounts = null;
+                    console.error('error:: ', error);
+                });
+        }
+    }
+
+    fetchCustomerAndMarker() {
+        //apex call
+        getCustomer({accountId: this.customerId})
+        .then(result => {
+            this.account = result;
+            if(result.BillingAddress) {
                 let marker = [{
                     location: {
                     Street:result.BillingAddress.street,
@@ -68,54 +112,33 @@ export default class SupplierMap extends LightningElement {
                         strokeWeight: 1,
                         scale: .10,
                     },
-                    title: this.account.Name,
-                    description: '<b>Account Name: </b>' + this.account.Name
+                    title: this.account.Name
                 }];
-                console.log('marker :',marker);
                 this.supplierMarkers = [...marker];
+                this.showMap = true;
                 this.center = marker;
-                this.zoomLevel = 12;
-                console.log('this.supplierMarkers ::',this.supplierMarkers);        
-            })
-            .catch( error=>{
-                this.accounts = null;
-                console.error('error:: ', error);
-            });
-        } else if (message.messageType == 'supplier') {
-
-            this.supplierId = message.recordId;
-            //apex call
-            getSupplier({supplierId: this.supplierId})
-            .then(result => {
-                let tempMarkers = new Array();
-                tempMarkers.push(...this.supplierMarkers);
-                this.supplierMarkers = undefined;
-                this.supplier = result;
-                console.log(this.account.BillingAddress.street);
-                let marker = [{
-                    location: {
-                        Street:this.supplier.Street__c,
-                        City: this.supplier.City__c,
-                        PostalCode: this.supplier.Postal_Code__c,
-                        State: this.supplier.State__c,
-                        Country: this.supplier.Country__c,
-                      },
-                      title: this.supplier.Name,
-                      description: '<b>Supplier Name: </b>' + this.supplier.Name
-                }];
-                console.log('marker :',marker);
-                tempMarkers.push(...marker);
-                this.supplierMarkers = tempMarkers;
-                console.log('this.supplierMarkers ::',JSON.parse(JSON.stringify(this.supplierMarkers)));        
-            })
-            .catch( error=>{
-                this.accounts = null;
-                console.error('error:: ', error);
-            });
-        }
+                this.zoomLevel = 12; 
+            } else {
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title: 'Map warning',
+                        message: 'Selected customer has no address information',
+                        variant: 'warning',
+                    }),
+                );
+            }   
+        })
+        .catch( error=>{
+            this.accounts = null;
+            console.error('error:: ', error);
+        });
     }
 
     connectedCallback() {
         this.subscribeToMessageChannel();
+        if(!!this.recordId) {
+            this.customerId = this.recordId;
+            this.fetchCustomerAndMarker();
+        }
     }
 }

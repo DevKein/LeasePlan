@@ -38,9 +38,9 @@
     <template if:true={customerFound}>
         <lightning-card title="Current Account">
             <div slot="footer">
-                    <lightning-badge label="View"></lightning-badge>
-                    <lightning-badge label="Edit"></lightning-badge>
-                    <lightning-badge label="Reset"></lightning-badge>
+                <lightning-button variant="brand" label="View" title="View Selected Client" onclick={handleView} class="slds-m-left_x-small"></lightning-button>
+                    
+                <lightning-button variant="destructive" label="New Search" title="Remove Client Selection" onclick={handleReset} class="slds-m-left_x-small"></lightning-button>
             </div>
             <p class="slds-p-horizontal_small">
                 <lightning-datatable 

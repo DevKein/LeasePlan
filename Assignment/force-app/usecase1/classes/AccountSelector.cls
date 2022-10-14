@@ -27,7 +27,7 @@ public with sharing class AccountSelector {
         SObjectAccessDecision decision = Security.stripInaccessible(
         AccessType.READABLE,
         [ SELECT  Id, Name, Phone, BillingAddress, BillingStreet, 
-            BillingCity, BillingPostalCode, BillingState, BillingCountry 
+            BillingCity, BillingPostalCode, BillingState, BillingCountry, Average_Rate__c 
              FROM Account 
              WHERE Id = :accountId LIMIT 1]);
  
