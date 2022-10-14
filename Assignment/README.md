@@ -60,6 +60,8 @@ Each row on this table contains 2 actions:
 * Add Action: Add action on this component is a row column button action which publishes a message using LMS to let other components now that the use wants to Add the supplier row to the Supplier Map.
 * Create Case: Create Case action is a dropdown button action. If the user (the agent) wants to create a case against a Supplier for the caller customer this action will trigger standard case creation dialog for easy access. The dialog will contains Account and Supplier lookups auto-populated.
 
+![Supplier List](/images/listSuppliers.png "List of Suppliers")
+
 ### Supplier Map Component - LWC
 
 This a LWC using `lightning-map` to display the caller customer and the selected supplier on native Google Maps. This component is a reusable component. Allowed places to use:
@@ -74,7 +76,7 @@ Selected Supplier markers will be displayed by using their `Address fields`. Geo
 
 The map contains the map native list view auto enabled.
 
-### Maintanence Scheduler Lighnint App - out of scope
+### Maintanence Scheduler Lighnint App - out of requested scope
 
 This is a Lightning Application created to enable the service agent to work on a single page instead of navigating between Account, Case , Supplier objects.
 
