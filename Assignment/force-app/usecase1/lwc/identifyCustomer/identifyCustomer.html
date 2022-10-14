@@ -1,0 +1,59 @@
+<!-- This component ignores customer not found situation! -->
+<template>
+    <!-- Show customer search card if no customer found yet -->
+    <template if:false={customerFound}>
+        <lightning-card title="Search Caller Account">
+            <lightning-layout multiple-rows="true" vertical-align="end">
+                <lightning-layout-item size="4" padding="around-small">
+                    <!--Input text to Search Account-->
+                    <lightning-input type="text" label="Enter Account Name or Phone To Search"
+                        value={searchKey} 
+                        onchange={handelSearchKey}> 
+                    </lightning-input>
+                </lightning-layout-item >
+
+                <lightning-layout-item size="2" padding="around-small">
+                    <!-- Invoke search call -->
+                    <lightning-button label="Search" variant="brand" onclick={SearchAccountHandler}>
+
+                    </lightning-button>
+                </lightning-layout-item>
+                <template if:true={foundMultipleMatches}>
+                    <lightning-layout-item size="12" padding="around-small">
+                        <!--List Of matching accounts in case multiple matches or duplicates exist-->
+                        <lightning-datatable 
+                            key-field="Id" 
+                            data={accounts} 
+                            columns ={cols}
+                            hide-checkbox-column="true"  
+                            show-row-number-column="true"
+                            onrowaction={callRowAction}
+                        >
+                        </lightning-datatable>
+                    </lightning-layout-item>
+                </template>
+            </lightning-layout>
+        </lightning-card>
+    </template>
+    <!-- Show simple customer information section when the customer is found -->
+    <template if:true={customerFound}>
+        <lightning-card title="Current Account">
+            <div slot="footer">
+                <lightning-button variant="brand" label="View" title="View Selected Client" onclick={handleView} class="slds-m-left_x-small"></lightning-button>
+                    
+                <lightning-button variant="destructive" label="New Search" title="Remove Client Selection" onclick={handleReset} class="slds-m-left_x-small"></lightning-button>
+            </div>
+            <p class="slds-p-horizontal_small">
+                <lightning-datatable 
+                        key-field="Id" 
+                        data={accounts} 
+                        columns ={customer_cols}
+                        hide-checkbox-column="true"  
+                        show-row-number-column="true"
+                        onrowaction={callRowAction}
+                    >
+                    </lightning-datatable>
+            </p>
+        </lightning-card>
+    </template>    
+</template>

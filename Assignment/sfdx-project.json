@@ -1,8 +1,16 @@
 {
   "packageDirectories": [
     {
-      "path": "force-app",
+      "path": "force-app/common/main",
       "default": true
+    },
+    {
+      "path": "force-app/usecase1",
+      "default": false
+    },
+    {
+      "path": "force-app/usecase2",
+      "default": false
     }
   ],
   "name": "LeasePlan",

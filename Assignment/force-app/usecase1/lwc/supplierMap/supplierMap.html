@@ -1,0 +1,21 @@
+<template>
+    <template if:true={showMap}>
+        <lightning-map map-markers={supplierMarkers}
+            markers-title="List of Markers"
+            onmarkerselect={handleMarkerSelect}
+            selected-marker-value={selectedMarkerValue}
+            show-footer
+            center={center}
+            zoom-level={zoomLevel}
+            list-view={listView}
+        > </lightning-map>
+    </template>
+    <template if:false={showMap}>
+        <div class="slds-illustration slds-illustration_large" aria-hidden="false" style="background: white; padding: 7%;">
+            <img src="/img/chatter/OpenRoad.svg" class="slds-illustration__svg" alt=""/>
+            <div class="slds-text-color_weak">
+                <h3 class="slds-text-heading_medium">Customer and Supplier location will be display here.</h3>
+            </div>
+        </div>
+    </template>
+</template>
