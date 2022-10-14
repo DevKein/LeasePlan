@@ -60,7 +60,7 @@ Each row on this table contains 2 actions:
 * Add Action: Add action on this component is a row column button action which publishes a message using LMS to let other components now that the use wants to Add the supplier row to the Supplier Map.
 * Create Case: Create Case action is a dropdown button action. If the user (the agent) wants to create a case against a Supplier for the caller customer this action will trigger standard case creation dialog for easy access. The dialog will contains Account and Supplier lookups auto-populated.
 
-![Supplier List](/images/listSuppliers.png "List of Suppliers")
+![Supplier List](**/Assignment/images/listSuppliers.png.png "List of Suppliers")
 
 ### Supplier Map Component - LWC
 
