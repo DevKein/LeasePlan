@@ -11,7 +11,5 @@ package.xml
 # LWC Jest
 **/__tests__/**
 
-**/appMenus/**
 
-**/objects/Account/**
-**/objects/Case/**
+

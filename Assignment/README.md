@@ -18,7 +18,7 @@ The Object definition of the custom object is as below:
 | Latitude  | Latitude__c  | The latitude of the location of the Supplier.  |
 | Longitude  | Longitude__c  | The Longitude of the location of the Supplier.  |
 
-Note : You may also create the flat fields to log the address of the Supplier on the object if
+*Note :* You may also create the flat fields to log the address of the Supplier on the object if
 needed instead of geo coordinates.
 
 The customer service agent should be able to search the suppliers that are located on the Billing
@@ -62,6 +62,10 @@ Each row on this table contains 2 actions:
 
 ![Supplier List](/Assignment/images/listSuppliers.png "List of Suppliers")
 
+### Account Flexipage
+
+![Account page](/Assignment/images/accountPage.png "Account Page")
+
 ### Supplier Map Component - LWC
 
 This a LWC using `lightning-map` to display the caller customer and the selected supplier on native Google Maps. This component is a reusable component. Allowed places to use:
@@ -95,3 +99,40 @@ When there are more than one matching customer returned after searching with par
 Selecting a client will publish a message thru LMS for Supplier List and Supplier Map components to get notified and act accordingly.
 
 ![Maintenance Scheduler with Customer](/Assignment/images/maintenanceSchedulerMarkers.png "Maintenance Scheduler with Customer")
+
+## Assignment Use Case #2
+
+The customer service agent logs the satisfaction rating of the customer after the resolution of a
+case in a field on the Case object.
+The rating is logged with values between 1 and 5. 5 being a highly satisfied customer.
+
+The average rating of all the cases of an Account needs to be visible on a field on the Account
+record so that the agents have an overview of customer satisfaction.
+
+The Average customer satisfaction rating needs to be updated on the Account on closure of each
+case.
+
+*Note :* In your design and code take into consideration that an account can have a large number
+of cases logged.
+
+## Assignment Use Case #2 Implementation
+
+### Standard Object Changes
+
+* In order to store rating there is new field on the Case object "Rate (Rate__c)"
+* In order to store calculated average rating there is new field on the Account object "Average Rate (Average_Rate__c)"
+
+### Case Rating - LWC
+
+This is a LWC to receive and display star rating for Case and Account object. The component has static (read-only) and interactive modes.
+Static mode is used on the Account object 
+
+![Account rating](/Assignment/images/accountRating.png "Account average case rating")
+
+and the interactive mode is used on the Case object pages.
+
+![Case rating](/Assignment/images/caseRating.png "Case rating")
+
+Considering the usage is different on these object the title is also different and it is configurable. The configuration of the component can be seen below.
+
+![caseRating config](/Assignment/images/ratingConfig.png "Case Rating configurations")
